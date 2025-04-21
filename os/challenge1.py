@@ -16,5 +16,18 @@
 
 
 import os
+# import shutil
 
 os.mkdir('test_dir')
+for i in range(3):
+    open(f"test_dir/file{i+1}.txt", 'w').close()
+
+
+print(os.listdir("test_dir"))
+
+# shutil.rmtree('test_dir') #thats just one line but need shutil lib
+
+for file in os.listdir("test_dir"):
+    os.remove(f"test_dir/{file}")
+
+os.rmdir('test_dir')
