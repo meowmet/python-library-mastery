@@ -1,0 +1,6 @@
+chamber_1:BANG! You lost!
+chamber_2:Survived
+chamber_3:Survived
+chamber_4:Survived
+chamber_5:Survived
+chamber_6:Survived

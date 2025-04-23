@@ -17,67 +17,108 @@
 
 # Updated Code for Folder Russian Roulette (with Winning Condition):
 
-
-"""
-import os
 import random
 
-# Setup function to create the game folders and files
-def setup_game():
-    if not os.path.exists("roulette_game"):
-        os.makedirs("roulette_game")
+def select_level():
+    print("Select difficulty level:")
+    print("1 - Easy (3 bullets, 9 empty)")
+    print("2 - Normal (6 bullets, 6 empty)")
+    print("3 - Hard (9 bullets, 9 empty)")
 
-    # Create 6 chambers (folders)
-    for i in range(1, 7):
-        chamber_path = f"roulette_game/chamber_{i}"
-        os.makedirs(chamber_path, exist_ok=True)
-        # Create a status.txt file inside each chamber
-        with open(f"{chamber_path}/status.txt", "w") as f:
-            f.write("Survived")
-
-    # Randomly choose one chamber to place the bullet
-    bullet_chamber = random.randint(1, 6)
-    with open(f"roulette_game/chamber_{bullet_chamber}/status.txt", "w") as f:
-        f.write("BANG! You lost!")
-
-    print("Game setup complete! Time to play!\n")
-
-# Game logic
-def play_game():
-    print("Welcome to Folder Russian Roulette!")
-    print("There are 6 chambers (folders), one of them contains the bullet.")
-    print("Choose a chamber (folder) and open the status.txt file to see if you survived.\n")
-    
-    # Player gets 6 chances, but the goal is to survive!
-    chances = 6
-    while chances > 0:
-        chamber_choice = input("Pick a chamber (1-6): ")
-        if chamber_choice.isdigit() and 1 <= int(chamber_choice) <= 6:
-            chamber_choice = int(chamber_choice)
-            chamber_path = f"roulette_game/chamber_{chamber_choice}"
-            
-            # Open the status.txt file to check the result
-            with open(f"{chamber_path}/status.txt", "r") as file:
-                result = file.read().strip()
-                
-            print(f"\nYou opened chamber {chamber_choice}...\n")
-            
-            if result == "BANG! You lost!":
-                print(f"*BANG!* You fired the bullet. GAME OVER.\n")
-                break
-            else:
-                print(f"*Click!* You survived this round! ({chances - 1} chances left)\n")
-                chances -= 1
+    while True:
+        choice = input("Enter level (1-3): ")
+        if choice in ["1", "2", "3"]:
+            levels = {"1": (3, 9), "2": (6, 6), "3": (9, 9)}
+            return levels[choice]
         else:
-            print("Invalid chamber choice. Please choose a number between 1 and 6.\n")
-        
-        if chances == 0:
-            print("Congratulations! You survived all the chambers and won the game!")
+            print("Invalid choice. Try again.")
 
-# Setup the game
-setup_game()
+def setup_chambers(bullets, empties):
+    chambers = ["BANG!"] * bullets + ["Click!"] * empties
+    random.shuffle(chambers)
+    return chambers
 
-# Start the game
-play_game()
+def machine_turn(chambers, used_indices):
+    while True:
+        index = random.randint(0, len(chambers) - 1)
+        if index not in used_indices:
+            used_indices.add(index)
+            print("\nMachine pulls the trigger at you...")
+            result = chambers[index]
+            if result == "BANG!":
+                print("💥 Machine hit you! You lost 1 heart.")
+                return -1, True
+            else:
+                print("🤖 Machine missed!")
+                return 0, True
 
-"""
+def player_turn(chambers, used_indices):
+    while True:
+        print("\nYour turn!")
+        print("1 - Shoot yourself")
+        print("2 - Shoot the machine")
+        choice = input("Choose (1/2): ")
+
+        if choice not in ["1", "2"]:
+            print("Invalid choice.")
+            continue
+
+        while True:
+            index = random.randint(0, len(chambers) - 1)
+            if index not in used_indices:
+                used_indices.add(index)
+                break
+
+        result = chambers[index]
+        print(f"\nYou pulled the trigger... {result}")
+
+        if choice == "1":  # Shoot yourself
+            if result == "BANG!":
+                print("💥 You shot yourself! -1 heart.")
+                return -1, True, 0
+            else:
+                print("😅 Lucky! You survived. +2 points.")
+                return 0, False, 2
+        else:  # Shoot machine
+            if result == "BANG!":
+                print("🎯 Direct hit! +2 points.")
+                return 0, False, 2
+            else:
+                print("😬 Missed the machine.")
+                return 0, True, 0
+
+def play_game():
+    bullets, empties = select_level()
+    chambers = setup_chambers(bullets, empties)
+    used_indices = set()
+
+    hearts = 3
+    points = 0
+    turn = "player"
+
+    while hearts > 0 and len(used_indices) < len(chambers):
+        if turn == "player":
+            heart_change, switch_turn, point_gain = player_turn(chambers, used_indices)
+            hearts += heart_change
+            points += point_gain
+            if switch_turn:
+                turn = "machine"
+        else:
+            heart_change, switch_turn = machine_turn(chambers, used_indices)
+            hearts += heart_change
+            if hearts <= 0:
+                break
+            if switch_turn:
+                turn = "player"
+
+        print(f"\n[Status] Hearts: {hearts} | Points: {points} | Remaining chambers: {len(chambers) - len(used_indices)}")
+
+    print("\n=== GAME OVER ===")
+    if hearts <= 0:
+        print("You lost all your hearts. Better luck next time!")
+    else:
+        print("You survived all chambers!")
+    print(f"Final Score: {points}")
+
+if __name__ == "__main__":
+    play_game()
