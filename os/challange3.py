@@ -118,62 +118,62 @@
 
 import os
 #
-# # Set up dungeon structure
-# def setup_dungeon():
-#     # Main folder
-#     os.makedirs("dungeon/room_1", exist_ok=True)
-#     os.makedirs("dungeon/room_2", exist_ok=True)
-#     os.makedirs("dungeon/room_3", exist_ok=True)
-#     
-#     # Room 1 clue
-#     with open("dungeon/room_1/clue.txt", "w") as f:
-#         f.write("The key to escaping lies beyond room 2...")
-#         
-#     # Room 2 clue
-#     with open("dungeon/room_2/clue.txt", "w") as f:
-#         f.write("You need to find the sword in room 3 to proceed!")
-#         
-#     # Room 3 sword
-#     with open("dungeon/room_3/sword.txt", "w") as f:
-#         f.write("Congratulations! You've found the sword! Now, you can escape.")
-#     
-#     print("Dungeon setup complete! Time to escape!")
-#     
-# # Start game
-# def start_game():
-#     print("You are in room 1.")
-#     while True:
-#         print("\nFiles here:", os.listdir("dungeon/room_1"))
-#         action = input("What do you do? (read clue.txt to proceed): ")
-#         
-#         if action == "cat clue.txt":
-#             print("\nThe key to escaping lies beyond room 2...")
-#             print("\nYou move to room 2.")
-#             print("\nYou are in room 2.")
-#             
-#             while True:
-#                 print("\nFiles here:", os.listdir("dungeon/room_2"))
-#                 action = input("What do you do? (read clue.txt to proceed): ")
-#                 
-#                 if action == "cat clue.txt":
-#                     print("\nYou need to find the sword in room 3 to proceed!")
-#                     print("\nYou move to room 3.")
-#                     print("\nYou are in room 3.")
-#                     
-#                     while True:
-#                         print("\nFiles here:", os.listdir("dungeon/room_3"))
-#                         action = input("What do you do? (read sword.txt to proceed): ")
-#                         
-#                         if action == "cat sword.txt":
-#                             print("\nCongratulations! You've found the sword! Now, you can escape.")
-#                             return
-#                         else:
-#                             print("Invalid action. Try again.")
-#         else:
-#             print("Invalid action. Try again.")
-#
-# # Run the game setup and start the game
-# setup_dungeon()
-# start_game()
-# ```
-#
+
+
+def setup_dungeon():
+
+    os.makedirs("dungeon/room_1", exist_ok=True)
+    os.makedirs("dungeon/room_2", exist_ok=True)
+    os.makedirs("dungeon/room_3", exist_ok=True)
+    
+
+    with open("dungeon/room_1/clue.txt", "w") as f:
+        f.write("The key to escaping lies beyond room 2...")
+        
+
+    with open("dungeon/room_2/clue.txt", "w") as f:
+        f.write("You need to find the sword in room 3 to proceed!")
+        
+   
+    with open("dungeon/room_3/sword.txt", "w") as f:
+        f.write("Congratulations! You've found the sword! Now, you can escape.")
+    
+   
+    
+
+def start_game():
+    print("You are in room 1.")
+    while True:
+        print("\nFiles here:", os.listdir("dungeon/room_1"))
+        action = input("What do you do? (read clue.txt to proceed): ")
+        
+        if action == "cat clue.txt":
+            print("\nThe key to escaping lies beyond room 2...")
+            print("\nYou move to room 2.")
+            print("\nYou are in room 2.")
+            
+            while True:
+                print("\nFiles here:", os.listdir("dungeon/room_2"))
+                action = input("What do you do? (read clue.txt to proceed): ")
+                
+                if action == "cat clue.txt":
+                    print("\nYou need to find the sword in room 3 to proceed!")
+                    print("\nYou move to room 3.")
+                    print("\nYou are in room 3.")
+                    
+                    while True:
+                        print("\nFiles here:", os.listdir("dungeon/room_3"))
+                        action = input("What do you do? (read sword.txt to proceed): ")
+                        
+                        if action == "cat sword.txt":
+                            print("\nCongratulations! You've found the sword! Now, you can escape.")
+                            return
+                        else:
+                            print("Invalid action. Try again.")
+        else:
+            print("Invalid action. Try again.(try 'cat' command to read the text file)")
+
+
+setup_dungeon()
+start_game()
+
